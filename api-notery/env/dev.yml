@@ -1,0 +1,14 @@
+stage: dev
+
+google_client_id: 266337254331-0lh0elm6n8a4nvrsf73lr2dogkjhr6l3.apps.googleusercontent.com
+google_secret_key:  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
+
+facebook_client_id: 1661401927641431
+facebook_secret_key: 3b9bb8153c0228a02dffedd1a45b9e37
+
+# Configuración de Cognito
+aws_region: 'us-east-1'  
+cognito_client_id: '4lo9s9cr27lqajm2lnk2tu6jdr'
+
+sender_email: 'david.garcia@tbbc.ai'
+arn_ses_identity: 'arn:aws:ses:us-east-1:411728455297:identity/david.garcia@tbbc.ai'

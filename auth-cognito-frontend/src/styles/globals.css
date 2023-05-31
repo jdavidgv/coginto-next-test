@@ -1,0 +1,50 @@
+body{
+  background-color: whitesmoke;
+}
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  height: 100vh;
+  flex-direction: column;
+  gap: 3em;
+}
+
+.home-container > button {
+  width: 5em;
+  min-width: 10%;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px black;
+  gap: 2.5em;
+  flex-direction: column;
+  width: 30vw;
+  height: 40vh;
+  margin: 7em auto;
+  padding: 3em;
+}
+
+.container-actions-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+input {
+  width: 100%;
+  padding: 0.7em;
+}
+button {
+  width: 20em;
+  min-width: 90%;
+  background-color: black;
+  color: white;
+  padding: 0.7em 0;
+}

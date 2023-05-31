@@ -1,0 +1,127 @@
+
+UserPool:
+  Type: AWS::Cognito::UserPool
+  Properties:
+    UserPoolName: notery-test-cf-juan
+    AutoVerifiedAttributes:
+      - email
+    Policies:
+      PasswordPolicy:
+        MinimumLength: 8
+        RequireLowercase: true
+        RequireNumbers: true
+        RequireSymbols: false
+        RequireUppercase: true
+    UsernameAttributes:
+      - email
+      _ UserName
+    Schema:
+      - Name: email
+        AttributeDataType: String
+        Mutable: true
+        Required: true
+      - Name: facebook_id
+        AttributeDataType: String
+        Mutable: true
+        Required: false
+      - Name: google_id
+        AttributeDataType: String
+        Mutable: true
+        Required: false
+      - Name: name
+        AttributeDataType: String
+        Mutable: true
+        Required: false
+
+    AdminCreateUserConfig:
+      AllowAdminCreateUserOnly: false
+    LambdaConfig:
+      PreSignUp: !GetAtt CognitoAuthLambdaFunction.Arn
+      PostConfirmation: !GetAtt CognitoPostConfirmationLambdaFunction.Arn
+    VerificationMessageTemplate:
+      DefaultEmailOption: CONFIRM_WITH_LINK
+      EmailMessageByLink: ${self:custom.confirm_email_template}
+      EmailSubjectByLink: Registro de usuario en Notery
+    EmailConfiguration:
+      EmailSendingAccount: DEVELOPER
+      SourceArn: ${self:custom.env_file.arn_ses_identity}
+     
+
+UserPoolDomain:
+  Type: AWS::Cognito::UserPoolDomain
+  Properties:
+    Domain: notery-domain-test-juan
+    UserPoolId: !Ref UserPool
+UserPoolClient:
+  Type: AWS::Cognito::UserPoolClient
+  Properties:
+    ClientName: notery-client
+    GenerateSecret: false
+    RefreshTokenValidity: 30
+    AllowedOAuthFlowsUserPoolClient: True
+    UserPoolId: !Ref UserPool
+    AllowedOAuthScopes:
+      - email
+      - openid
+    ExplicitAuthFlows:
+      - ALLOW_ADMIN_USER_PASSWORD_AUTH
+      - ALLOW_USER_PASSWORD_AUTH
+      - ALLOW_USER_SRP_AUTH
+      - ALLOW_REFRESH_TOKEN_AUTH
+    SupportedIdentityProviders:
+      - COGNITO
+      - Facebook
+      - Google
+    AllowedOAuthFlows:
+      - code
+    CallbackURLs:
+      - http://localhost:3000/home
+    DefaultRedirectURI: http://localhost:3000/home
+    LogoutURLs:
+      - http://localhost:3000/
+IdentityProviderFacebook:
+  Type: AWS::Cognito::UserPoolIdentityProvider
+  Properties:
+    AttributeMapping:
+      email: email
+      name: name
+    ProviderDetails:
+      client_id: ${self:custom.env_file.facebook_client_id}
+      client_secret: ${self:custom.env_file.facebook_secret_key}
+      authorize_scopes: email
+    ProviderName: Facebook
+    ProviderType: Facebook
+    UserPoolId: !Ref UserPool
+IdentityProviderGoogle:
+  Type: AWS::Cognito::UserPoolIdentityProvider
+  Properties:
+    AttributeMapping:
+      email: email
+      name: name
+    ProviderDetails:
+      client_id: ${self:custom.env_file.google_client_id}
+      client_secret: ${self:custom.env_file.google_secret_key}
+      authorize_scopes: email
+    ProviderName: Google
+    ProviderType: Google
+    UserPoolId: !Ref UserPool
+
+OnCognitoSignupPermission:
+  Type: "AWS::Lambda::Permission"
+  Properties:
+    Action: "lambda:InvokeFunction"
+    FunctionName:
+      Fn::GetAtt: ["CognitoAuthLambdaFunction", "Arn"]
+    Principal: "cognito-idp.amazonaws.com"
+    SourceArn: !GetAtt UserPool.Arn
+
+OnCognitoSignupSuccessPermission:
+  Type: "AWS::Lambda::Permission"
+  Properties:
+    Action: "lambda:InvokeFunction"
+    FunctionName:
+      Fn::GetAtt: ["CognitoPostConfirmationLambdaFunction", "Arn"]
+    Principal: "cognito-idp.amazonaws.com"
+    SourceArn: !GetAtt UserPool.Arn
+
+
