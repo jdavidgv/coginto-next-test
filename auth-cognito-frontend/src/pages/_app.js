@@ -10,11 +10,11 @@ const COGNITO_DEV = {
 };
 const COGNITO_STAGING = {
   REGION: "us-east-1",
-  USER_POOL_ID: "us-east-1_JsAPmk5Gi",
-  APP_CLIENT_ID: "5h0o1uehb8andqhgfo5s8k4r9i",
+  USER_POOL_ID: "us-east-1_dcws4XoZ3",
+  APP_CLIENT_ID: "6i8s4tdj4s8pspk0k5upk7r835",
   DOMAIN: "notery-auth-domain-staging.auth.us-east-1.amazoncognito.com",
 };
-const COGNITO = COGNITO_STAGING
+const COGNITO = COGNITO_DEV
 Amplify.configure({
   aws_cognito_region: COGNITO.REGION,
   aws_user_pools_id: COGNITO.USER_POOL_ID,

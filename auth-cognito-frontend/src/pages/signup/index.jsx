@@ -20,10 +20,10 @@ export default function Signup() {
       registration_type: "notery",
       status: "enabled",
     };
-    const URL_STAGING= "https://10lxhwxwf1.execute-api.us-east-1.amazonaws.com/staging"
+    const URL_STAGING= "https://1cnq4oa4l5.execute-api.us-east-1.amazonaws.com/staging"
     const URL_DEV= "https://86r25v5yvd.execute-api.us-east-1.amazonaws.com/dev"
 
-    fetch(`${URL_STAGING}/notery/users/add`, {
+    fetch(`${URL_DEV}/notery/users/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
